@@ -1,0 +1,24 @@
+{
+  "protocol_id":"ABC01",
+  "growth_station_id":"LC001",
+  "sampling_frequency":"5m",
+  "growth_cycle":{
+    "time_on":"5h",
+    "time_off":"3h",
+    "led_color":"white"
+  },
+  "limits":{
+    "temp":{
+      "low_alert":50,
+      "low_warning":65,
+      "high_warning":80,
+      "high_alert":90
+    },
+    "pH":{
+      "low_alert":4.5,
+      "low_warning":5.5,
+      "high_warning":7.5,
+      "high_alert":8.5
+    }
+  }
+}
