@@ -1,0 +1,9 @@
+[ 
+    { "sensor": "pH", "reading": "7.5", "tstamp": 100 },
+    { "sensor": "pH", "reading": "7.6", "tstamp": 101 },
+    { "sensor": "pH", "reading": "7.4", "tstamp": 102 },
+    { "sensor": "pH", "reading": "7.5", "tstamp": 103 },
+    { "sensor": "pH", "reading": "7.4", "tstamp": 104 },
+    { "sensor": "pH", "reading": "7.2", "tstamp": 105 }
+  ]
+  
