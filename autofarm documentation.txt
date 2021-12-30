@@ -1,0 +1,26 @@
+To use dashboard:
+
+Open command prompt/terminal and navigate to auto-farm directory
+
+Enter the following commands to install each module:
+
+sudo apt install python3-pip
+pip3 install python3
+pip3 install dash
+pip3 install dash-bootstrap
+pip3 install pandas
+pip3 install dash-daq
+
+To open the dashboard open a browser and enter into the URL space:
+
+"localhost:8050"
+
+The main page that loads first is a dashboard of the selected growth station. Use the drop down menu in the top left corner to switch stations.
+
+Each sensor's latest reading is displayed on the dashboard and updates in three-second intervals
+
+The tabs bar on the left side of the page are for navigating through pages of the FarmerHub, which are the dashboard (Dashboard), a graph report (Reports), and a control panel (Control Panel).
+
+The graphs tab allows the user to display a line graph of whatever sensor is selected. This line graph shows the readings recorded throughout the day. Use the drop down tab to select which sensor to graph, and the date range to select which day to pull readings from.
+
+The control panel tab allows the user to update the growthstation's settings. Use the input fields to update each setting.
