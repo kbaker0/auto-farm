@@ -17,7 +17,7 @@ import dash_html_components as html
 import datetime
 # from warnings import alert
 
-# TODO: use PUT to update threshold values in rasperry pie>arduino>growth station
+# TODO: use req to update threshold values in rasperry pie>arduino>growth station
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions = True)
 
