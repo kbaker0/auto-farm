@@ -17,14 +17,17 @@ import dash_html_components as html
 import datetime
 # from warnings import alert
 
+# TODO: use PUT to update threshold values in rasperry pie>arduino>growth station
+
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions = True)
-# TODO: POST new data inputs and send them to the rasperry pie. Updates arduino to new values
+
 
 # Using the server to get values
 data_url = 'http://192.168.5.220:8246/ph'
 # df_receiver = pd.read_json(data_url)
 
 # Parsing the server values
+
 # df_receiver['new_date'] = [datetime.datetime.strptime(d, '%Y-%m-%dT%H:%M:%S.%f%z').date() for d in df_receiver['tstamp']]
 # df_receiver['new_time'] = [datetime.datetime.strptime(d, '%Y-%m-%dT%H:%M:%S.%f%z').time() for d in df_receiver['tstamp']]
 # available_indicators_new = df_receiver.sensor.unique()
@@ -35,11 +38,11 @@ data_url = 'http://192.168.5.220:8246/ph'
 #     latest_values[i] = df_receiver[reading == i].tail(1)
 #     print(latest_values)
 
-
+## Test
 with open('sample_data.json') as json_file:
     df = pd.read_json(json_file)
 
-
+## Test
 with open('tstamp_data.json') as json_file:
     df_tstamp = pd.read_json(json_file)
     df_tstamp['new_date'] = [datetime.datetime.strptime(d, '%Y-%m-%dT%H:%M:%S.%f%z').date() for d in df_tstamp['tstamp']]
@@ -49,12 +52,8 @@ with open('tstamp_data.json') as json_file:
     latest_values = {}
     for i in available_indicators:
         latest_values[i] = df_tstamp[reading == i].tail(1)
-        
 
-# with open('sensor_data.json') as json_file:
-#     df_sensor = pd.read_json(json_file)
-#     sensor_params = df_sensor.sensor.unique()
-    
+# Tabs styling 
 tabs_style= {
     # 'margin-bottom': '-1px',
     'background-color': 'none',
@@ -66,10 +65,10 @@ tabs_style_active= {
     'background-color': 'none',
     'padding-left': '15px',
     'border-left':'3px solid royalblue',
-    'color': 'black'
-    
+    'color': 'black' 
 }
 
+# Setting up layout for tab 2 date picker
 date_picker = html.Div([
     dcc.DatePickerSingle(
         id='my-date-picker-single',
@@ -78,38 +77,32 @@ date_picker = html.Div([
         initial_visible_month=datetime.date(1970, 1, 1),
         display_format='YYYY-MM-DD',
         date=df_tstamp['new_date'][0],
-        persistence=True
-                                    
+        persistence=True                           
         ),
-])
+    ])
 
+#Not used--Old graph calls
 # fig = px.line(df_tstamp, x="tstamp", y=df_tstamp.reading, title='PH LEVELS')
-fig_2 = px.line(df, x="tstamp", y="temperature", title='TEMPERATURE')
-fig_3 = px.line(df, x="tstamp", y="humidity", title='HUMIDITY')
-fig_4 = px.line(df, x="tstamp", y="water_level", title='WATER LEVEL')
+# fig_2 = px.line(df, x="tstamp", y="temperature", title='TEMPERATURE')
+# fig_3 = px.line(df, x="tstamp", y="humidity", title='HUMIDITY')
+# fig_4 = px.line(df, x="tstamp", y="water_level", title='WATER LEVEL')
 
 
-# gs_id = df_tstamp['ID'].unique()
-# sort into own data frames? can/should i keep them in the same df?
+# Alert layout
 alerts = html.Div([
-        dbc.Alert(
-            [
+        dbc.Alert([
                 html.I(className="bi bi-exclamation-triangle-fill me-2"),
-                "An example warning alert with an icon",
-            ],
-            color="warning",
-            className="d-flex align-items-center",
-        ),
-        dbc.Alert(
-            [
+                "An example warning \[^-^]/"],
+                color="warning",
+                className="d-flex align-items-center",
+            ),
+        dbc.Alert([
                 html.I(className="bi bi-x-octagon-fill me-2"),
-                "An example danger alert with an icon",
+                "Ope!",
             ],
             color="danger",
-            className="d-flex align-items-center",
-        ),
-    ]
-)
+            className="d-flex align-items-center")
+            ])
 card_style = {
             #  'width':'100%',
             #  'height' : '100%',
@@ -122,29 +115,28 @@ growth_station_select = html.Div([
             id='growth-station-dropdown',
             options=[
                 {'label': 'Growth Station 1', 'value': 'GS01'},
-                {'label': 'Growth Station 2', 'value': 'GS02'}
-            ],
+                {'label': 'Growth Station 2', 'value': 'GS02'}],
             value='GS01', 
-            style={'width': '50%', 'float': 'right'}  
-            ),
-        ),    
-])
+            style={'width': '50%', 'float': 'right'}),
+        )   
+    ])
 
 # available_indicators = df['ph']
 # print("Available indicators: ", available_indicators)
 
-    # Temporarily setting the latest value to display below
+# Temporarily setting the latest value to display below
 
 current_ph = df['ph'][0] 
 params = list(df)
 max_length = len(df)
 
+# Defining the layout
 app.layout = dbc.Container(className='bg-dark mb-10', style={'padding':'10px'}, children=[
     dbc.Row([
-        dbc.Col(html.H3('Farmer Hub', className= 'text-white'), width=6),
+        dbc.Col(html.H3('Farmer Hub \[^-^]/', className= 'text-white'), width=6),
         # dbc.Col(html.H3(id='gs-output-container', className= 'text-white'), width=4),
         dbc.Col(growth_station_select, width=6)]),
-  
+    # Tabs Sidebar
     html.Div([
             dcc.Tabs(id="tabs-example-graph", value='tab-1-example-graph', children=[
             dcc.Tab(label='Dashboard', value='tab-1-example-graph', style=tabs_style, selected_style=tabs_style_active),
@@ -154,26 +146,29 @@ app.layout = dbc.Container(className='bg-dark mb-10', style={'padding':'10px'}, 
             dcc.Tab(label='Beep', value='', style=tabs_style, selected_style=tabs_style_active),
             dcc.Tab(label='Boop', value='', style=tabs_style, selected_style=tabs_style_active),
             ],
-    vertical = True,
-    parent_style={'float': 'left', 'margin-top': '10px', 'margin-left': '0px'}),
-]),
-    html.Div(id='tabs-content-example-graph', style={'float' : 'left'},className='mt-2'),
+        vertical = True,
+        parent_style={'float': 'left', 'margin-top': '10px', 'margin-left': '0px'})
+    ]),
+
+    # Reload intervals to update dashboard
+    html.Div(id='tabs-content-example-graph', style={'float' : 'left'}, className='mt-2'),
     dcc.Interval(
                 id='interval-component2',
                 interval=1000, # in milliseconds
                 n_intervals=-1
-                ),
-],
-fluid=True
+                )],
+    fluid=True
 )
 
+# Callback to update growth container selector
 @app.callback(
     Output('gs-output-container', 'children'),
     Input('growth-station-dropdown', 'value')
-)
+    )
 def update_output(value):
     return '{}'.format(value)
 
+# Callback to update Graphing tab
 @app.callback(
     Output('tabs-content-example-graph', 'children'),
     Input('tabs-example-graph', 'value'),
@@ -181,6 +176,7 @@ def update_output(value):
     )
 
 def render_content(tab, intervals):
+    # First tab view, dashboard displaying current readings
     if tab == 'tab-1-example-graph':
         return [        
         html.Div(style={'margin-left' : '50px', 'margin-top':'30px'}, children=[
@@ -188,68 +184,55 @@ def render_content(tab, intervals):
             dbc.Row([
                 dbc.Col(
                     dbc.Card([
-                        dbc.CardBody(
-                        [
+                        dbc.CardBody([
                             html.H4('Temperature'),
                             # html.H5(datetime.datetime.now())
-                            
                             # html.H5(latest_values['temperature']['reading'].to_string(index=False), u"\N{DEGREE SIGN}")
-                        ]),
-                
+                        ])
                     ],
                     style = card_style,
                     className='shadow p-3 mb-5 bg-body rounded'
-                    ),
-            
+                    )
                 ),
                 dbc.Col(
                     dbc.Card(
-                        
-                        dbc.CardBody(
-                        [
-                        html.H4('Humidity'),
-                        html.H5(df['humidity'][0].round(decimals=1))
-                        ]),
-                    
-                    
-                    style = card_style,
-                    className='shadow p-3 mb-5 bg-body rounded'),
-                    
-                ),
+                        dbc.CardBody([
+                            html.H4('Humidity'),
+                            html.H5(df['humidity'][0].round(decimals=1))
+                            ]),
+                        style = card_style,
+                        className='shadow p-3 mb-5 bg-body rounded'
+                        )
+                    ),
                 dbc.Col(
                     dbc.Card([
                         # dbc.CardHeader('Light Cycle'),
-                        dbc.CardBody(
-                        [
+                        dbc.CardBody([
                             html.H4('Light Cycle'),
                             html.H5('White: on, 100%'),
                             html.H6('Time remaining: 00:10:20:30'),
-                            ]),
-                    ],
-                    style = card_style,
-                    className='shadow p-3 mb-5 bg-body rounded'),
+                            ])
+                        ],
+                        style = card_style,
+                        className='shadow p-3 mb-5 bg-body rounded')
                     ),
-                
-                    dbc.Col(
-                        dbc.Card([
-                            # dbc.CardHeader('Conductivity'),
-                            dbc.CardBody(
-                            [
-                        
+                dbc.Col(
+                    dbc.Card([
+                        # dbc.CardHeader('Conductivity'),
+                        dbc.CardBody([
                             html.H4('Conductivity'),
                             html.H5(latest_values['electroconductivity']['reading'].to_string(index=False)) 
                         ]),
                     
                         ],
                         style = card_style,
-                        className='shadow p-3 mb-5 bg-body rounded' ),
-                
-                    ),
-                    ],
+                        className='shadow p-3 mb-5 bg-body rounded'
+                        )
+                    )
+                ],
                 className='mb-3'
-                ),
-            dbc.Row(
-            [
+            ),
+            dbc.Row([
                 dbc.Col(
                     dbc.Card([
                         # dbc.CardHeader('pH'),
@@ -282,11 +265,12 @@ def render_content(tab, intervals):
                     ],
                     style = card_style,
                     className='shadow p-3 mb-5 bg-body rounded'
-                        ))
-                    ])
+                        )
+                    )
                 ])
-            ]
-    
+            ])
+        ]
+    # Case for Graph tab
     elif tab == 'tab-2-example-graph':
         return html.Div([
             
@@ -298,8 +282,7 @@ def render_content(tab, intervals):
                                 html.H5(datetime.datetime.now()),
                                 html.H3('Reports', style={'margin-bottom': '30px'}),
                                 dbc.Row([
-                                    
-                                        dbc.Col(
+                                    dbc.Col(
                                             # dcc.Dropdown(
                                             
                                             # id='sensor-type',
@@ -311,6 +294,8 @@ def render_content(tab, intervals):
                                             #     'width':'70%',
                                             # }
                                             # ),
+
+                                            # Choose which graph to display as base
                                             dcc.Dropdown(
                                             
                                             id='sensor-type',
@@ -320,12 +305,11 @@ def render_content(tab, intervals):
                                             style= {
                                                 'color':'black',
                                                 'width':'70%',
-                                            }
-                                            ),
+                                            }),
                                         ),
 
                                 # dbc.Col(date_picker),
-                                ]),
+                                    ]),
                                 # dcc.Checklist(
                                 #     id="checklist",
                                 #     options=[{"label": x, "value": x} 
@@ -334,6 +318,7 @@ def render_content(tab, intervals):
                                 #     labelStyle={'display': 'inline-block', 'margin-left': '5px'},
                                     
                                 # ),
+                                # Choose the graph to add 
                                 dcc.Checklist(
                                     id="checklist",
                                     options=[{"label": x, "value": x} for x in available_indicators],
@@ -381,8 +366,9 @@ def render_content(tab, intervals):
             
             
          ],
-            style={'width':'950px', 'margin-left':'50px', 'margin-top':'30px'})
+        style={'width':'950px', 'margin-left':'50px', 'margin-top':'30px'})
 
+    # Tab for updating the settings--limited to temp, lights
     elif tab == 'tab-3-example-graph':
         return html.Div([
                 html.H3('Settings', style={'margin-bottom': '30px'}),
@@ -481,6 +467,7 @@ def render_content(tab, intervals):
     # Input('checklist', 'value')
     )
 
+# Test update graph with server data--only reading ph
 # def update_graph(my_date_picker, sensor_type, checklist_value):
     
     # input_date = datetime.datetime.strptime(my_date_picker, '%Y-%m-%d').date()
@@ -493,7 +480,7 @@ def render_content(tab, intervals):
 
     # return fig
 
-# Testing for server data
+# Update graph with server data--only reading ph
 def update_graph(sensor_type):
     # input_date = datetime.datetime.strptime(my_date_picker, '%Y-%m-%d').date()
     dff = df_receiver[df_receiver['sensor'] == 'pH'][df_receiver.new_date == '1970-01-01']
